@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div id="main">
+    <div class="d-flex flex-row">
+        <div class="d-flex flex-column left-column">
+            <div class="d-flex">
+                <div style="width:50px">
+                    <button type="button" class="btn fas fa-plus toggler" data-toggle="modal" data-target="#entryModal"></button>
+                </div>
+
+                <div class="form-group">
+                    <input v-model="searchName" type="text" class="form-control" id="searchText" placeholder="Search">
+                </div>
+            </div>
+            <div class="d-flex flex-row bookrow" v-for="item in filteredPhoneBook">
+                <div class="indexEdge">{{item.index}}</div>
+                <div>
+                    <ul class="phonebook">
+                        <li v-for="contact in item.contacts" :class="{liselected: $root.selectedContact.id === contact.id}" v-on:click="getContact($event, contact)">
+                            {{contact.name}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column right-column">
+            <div v-if="selectedContact.id > 0" class="d-flex flex-row justify-content-end">
+                <div class="contactHeader"><h1>{{selectedContact.name}}</h1></div>
+                <div style="width:50px">
+                    <button type="button" class="btn fas fa-plus toggler" data-toggle="collapse" data-target="#newEntry"></button>
+                </div>
+            </div>
+            <div id="newEntry" class="collapse form-group">
+                <label for="newEntryText">Entry Name</label>
+                <input v-model="newEntry.name" type="text" class="form-control" id="newEntryText" aria-describedby="newEntryTextHelp" placeholder="Entry name">
+
+                <label for="newEntryName">Phone number</label>
+                <input v-model="newEntry.phoneNumber" type="text" class="form-control" id="newEntryName" aria-describedby="newEntryNameHelp" placeholder="Phone number">
+                <button type="button" class="btn btn-primary" v-on:click="addNewEntry">Add entry</button>
+            </div>
+            <div class="d-flex flex-row contactrow" v-for="entry in selectedContact.entry" style="background:#f8d006">
+                <div class="contactdetailsrow">
+                    <div class="resultsrow">
+                        <span class="contactLabel">Name</span><span class="contactData">{{entry.name}}</span>
+                        <span class="contactLabel">Number</span><span class="contactData">{{entry.phoneNumber}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="entryModal" tabindex="-1" role="dialog" aria-labelledby="entryModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new contact</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="contactName">Contact Name</label>
+                        <input v-model="newContact.name" type="text" class="form-control" id="contactText" aria-describedby="contactHelp" placeholder="Contact name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entryName">Entry Name</label>
+                        <input v-model="newEntry.name" type="text" class="form-control" id="entryText" aria-describedby="entryHelp" placeholder="Entry name">
+
+                        <label for="entryName">Phone number</label>
+                        <input v-model="newEntry.phoneNumber" type="text" class="form-control" id="entryText" aria-describedby="entryHelp" placeholder="Phone number">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" v-on:click="addNewContact">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
